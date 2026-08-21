@@ -4,7 +4,11 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.62.1",
-    "@types/node": "^26.2.0"
+    "@types/node": "^26.2.0",
+    "dotenv": "^17.4.2"
   },
-  "scripts": {}
+  "scripts": {
+    "test": "playwright test",
+    "test:report": "playwright show-report"
+  }
 }
