@@ -15,15 +15,15 @@ test('GET all users', async ({ request }) => {
     // Bonus task
     await test.step('Validate data types', async () => {
         expect(typeof responseData.page).toBe('number');
-        expect(typeof responseData.page).toBe(expectedData.page);
+        expect(responseData.page).toBe(expectedData.page);
         expect(typeof responseData.per_page).toBe('number');
-        expect(typeof responseData.per_page).toBe(expectedData.per_page);
+        expect(responseData.per_page).toBe(expectedData.per_page);
         expect(typeof responseData.total).toBe('number');
-        expect(typeof responseData.total).toBe(expectedData.total);
+        expect(responseData.total).toBe(expectedData.total);
         expect(typeof responseData.total_pages).toBe('number');
-        expect(typeof responseData.total_pages).toBe(expectedData.total_pages);
+        expect(responseData.total_pages).toBe(expectedData.total_pages);
         expect(typeof responseData.data).toBe('object');
-        expect(typeof responseData.data).toBe(expectedData.data);
+        expect(responseData.data).toEqual(expectedData.data);
         expect(typeof responseData.data[0].id).toBe('number');
         expect(typeof responseData.data[0].email).toBe('string');
         expect(typeof responseData.data[0].first_name).toBe('string');
