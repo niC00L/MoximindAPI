@@ -1,11 +1,14 @@
 {
   "devDependencies": {
+    "zod": "^4.4.3",
     "@playwright/test": "^1.62.1",
     "@types/node": "^26.2.0",
     "dotenv": "^17.4.2"
   },
   "scripts": {
     "test": "playwright test",
-    "test:report": "playwright show-report"
+    "test:get": "playwright test tests/get.spec.ts",
+    "test:post": "playwright test tests/post.spec.ts",
+    "report": "playwright show-report"
   }
 }

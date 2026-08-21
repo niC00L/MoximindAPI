@@ -1,22 +1,29 @@
-import { test, expect } from '@playwright/test';;
+import { test, expect } from '@playwright/test';
 import users from '../test-data/users-post.json';
+import { z } from 'zod';
 
 const RESPONSE_TIME_THRESHOLD = 150; // in milliseconds
+const DATE_REGEX = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/;
+
+const postResponseSchema = z.object({
+    id: z.string(),
+    name: z.string(),
+    job: z.string(),
+    createdAt: z.string().regex(DATE_REGEX),
+    _meta: z.object({}).optional()
+});
 
 for (const user of users) {
-    test(`POST user to api - ${user.name}`, async ({ request }) => {
+    test(`POST /api/users creates a user - ${user.name}`, async ({ request }) => {
         const response = await request.post('/api/users', { data: user });
         
         const responseData = await response.json();
-        await test.step('Validate response status, and data', async () => {
+        await test.step('Validate response status and data', async () => {
             expect(response.status()).toBe(201);
-            expect(Object.keys(responseData).sort()).toEqual(['createdAt', 'id', 'job', 'name', '_meta'].sort());
-            expect(responseData).toMatchObject({
-                id: expect.any(String),
-                createdAt: expect.stringMatching(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/),
-                name: user.name,
-                job: user.job
-            });
+            const result = postResponseSchema.safeParse(responseData);
+            expect(result.success, result.error?.message).toBe(true);
+            expect(responseData.name).toBe(user.name);
+            expect(responseData.job).toBe(user.job);
         });
         
         await test.step('Validate response time', async () => {
